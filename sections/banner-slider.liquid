@@ -1,24 +1,79 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+>
+
+  <div class="page-width">
+    <div class="carousel-container">
+      <div class="carousel">
+        <!-- Clone of the last slide -->
+        {% assign last_block = section.blocks | last %}
+        {% if last_block.type == 'carousel' %}
+          <div class="carousel-slide">
+            <img src="{{ last_block.settings.image | image_url }}" alt="{{ last_block.settings.heading }}">
+            <div class="carousel-content">
+              <p>{{ last_block.settings.subheading }}</p>
+              <h1>{{ last_block.settings.heading }}</h1>
+              <a href="{{ last_block.settings.button }}" class="carousel-button" {% unless last_block.settings.button %}style="display: none;"{% endunless %}>shop now</a>
+            </div>
+          </div>
+        {% endif %}
+  
+        {% for block in section.blocks %}
+          {% if block.type == 'carousel' %}
+            <div class="carousel-slide">
+              <img src="{{ block.settings.image | image_url }}" alt="{{ block.settings.heading }}">
+              <div class="carousel-content">
+                <p>{{ block.settings.subheading }}</p>
+                <h1>{{ block.settings.heading }}</h1>
+                <a href="{{ block.settings.button }}" class="carousel-button" {% unless block.settings.button %}style="display: none;"{% endunless %}>shop now</a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+  
+        <!-- Clone of the first slide -->
+        {% assign first_block = section.blocks | first %}
+        {% if first_block.type == 'carousel' %}
+          <div class="carousel-slide">
+            <img src="{{ first_block.settings.image | image_url }}" alt="{{ first_block.settings.heading }}">
+            <div class="carousel-content">
+              <p>{{ first_block.settings.subheading }}</p>
+              <h1>{{ first_block.settings.heading }}</h1>
+              <a href="{{ first_block.settings.button }}" class="carousel-button" {% unless first_block.settings.button %}style="display: none;"{% endunless %}>shop now</a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <div class="carousel-controls">
+        <span class="prev-slide"><i class="fas fa-chevron-left"></i></span>
+        <span class="next-slide"><i class="fas fa-chevron-right"></i></span>
+      </div>
+      <!-- Slide paginator -->
+      <div class="carousel-paginator">
+        {% for block in section.blocks %}
+          {% if block.type == 'carousel' %}
+            <input type="radio" name="carousel-paginator" class="carousel-radio" data-slide-index="{{ forloop.index0 }}" {% if forloop.first %}checked{% endif %}>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 {% schema %}
 {
-  "name": "Banner Slider",
-  "tag": "section",
-  "class": "banner-slider",
-  "settings": [
-    {
-      "type": "range",
-      "id": "slider_speed",
-      "min": 3,
-      "max": 10,
-      "step": 1,
-      "unit": "sec",
-      "label": "Slider Speed",
-      "default": 5
-    }
-  ],
+  "name": "Image-carousel",
+  "settings": [],
   "blocks": [
     {
-      "type": "slide",
-      "name": "Slide",
+      "type": "carousel",
+      "name": "carousel",
       "settings": [
         {
           "type": "image_picker",
@@ -26,156 +81,229 @@
           "label": "Image"
         },
         {
-          "type": "url",
-          "id": "link",
-          "label": "Slide Link"
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
         },
         {
           "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Banner Heading"
+          "id": "subheading",
+          "label": "Subheading"
         },
         {
-          "type": "richtext",
-          "id": "text",
-          "label": "Text",
-          "default": "<p>Add your banner text here</p>"
+          "type": "url",
+          "id": "button",
+          "label": "Button URL"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Banner Slider",
-      "blocks": [
-        {
-          "type": "slide"
-        },
-        {
-          "type": "slide"
-        },
-        {
-          "type": "slide"
-        }
-      ]
+      "name": "carousel"
     }
   ]
 }
 {% endschema %}
-
-{% stylesheet %}
-.banner-slider {
-  position: relative;
-  overflow: hidden;
-}
-.slider-container {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-.slide {
-  flex: 0 0 100%;
-  width: 100%;
-}
-.slide img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.slide-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #fff;
-}
-.pagination {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-}
-.pagination-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.pagination-dot.active {
-  background-color: #fff;
-}
-{% endstylesheet %}
-
-{% javascript %}
-document.addEventListener('DOMContentLoaded', function() {
-  var sliderContainer = document.querySelector('.slider-container');
-  var slides = document.querySelectorAll('.slide');
-  var dots = document.querySelectorAll('.pagination-dot');
-  var currentSlide = 0;
-  var sliderSpeed = {{ section.settings.slider_speed | times: 1000 }};
-  var timer;
-
-  function showSlide(n) {
-    currentSlide = (n + slides.length) % slides.length;
-    sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentSlide);
-    });
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
   }
-
-  function nextSlide() {
-    showSlide(currentSlide + 1);
-    startTimer();
-  }
-
-  function startTimer() {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(nextSlide, sliderSpeed);
-  }
-
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      showSlide(index);
-      startTimer();
-    });
-  });
-
-  startTimer();
-});
-{% endjavascript %}
-
-<div class="banner-slider">
-  <div class="slider-container">
-    {% for block in section.blocks %}
-      {% if block.type == 'slide' %}
-        <div class="slide">
-          {% if block.settings.link != blank %}
-            <a href="{{ block.settings.link }}">
-          {% endif %}
-          {% if block.settings.image != blank %}
-            {{ block.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', alt: block.settings.heading }}
-          {% endif %}
-          {% if block.settings.link != blank %}
-            </a>
-          {% endif %}
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
   
-  <div class="pagination">
-    {% for block in section.blocks %}
-      {% if block.type == 'slide' %}
-        <div class="pagination-dot{% if forloop.first %} active{% endif %}"></div>
-      {% endif %}
-    {% endfor %}
-  </div>
-</div>
+  .carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .carousel-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+  }
+  
+  .carousel-slide img {
+    width: 100%;
+    height: 650px;
+    Object-fit:cover;
+    display: block;
+  }
+  
+  .carousel-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 2;
+    width: 100%;
+  }
+  
+  .carousel-content h1 {
+    color: #fff;
+    font-weight: 600;
+    margin: 10px 0;
+  }
+  
+  .carousel-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .carousel-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #212529;
+    background-color: #fff;
+    border-color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    z-index: 5;
+  }
+  
+  .carousel-button:hover {
+    background-color: #c5837c;
+  }
+  
+  .carousel-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
+  }
+  
+  .carousel-controls span {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 15px 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .carousel-controls span:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  /* Paginator Styling */
+  .carousel-paginator {
+    position: absolute;
+    bottom: 50px; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .carousel-radio {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    appearance: none;
+    background-color: #ccc;
+    border-radius: 50%;
+    border: 7px solid transparent; /* Transparent border by default */
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-radio:checked {
+    background-color: #ff0000; /* Red color for checked state */
+    border-color: rgba(255, 255, 255, 0.7); /* Transparent-like border */
+  }
+  
+  @media (max-width: 768px) {
+    .carousel-content h2 {
+      font-size: 1.5em;
+    }
+  
+    .carousel-content p {
+      font-size: 1em;
+    }
+  }
+  
+</style>
+
+<script>
+  $(document).ready(function() {
+    var slideIndex = 1;
+    var slides = $('.carousel-slide');
+    var totalSlides = slides.length;
+  
+    // Initial setup to show the first slide
+    var transformValue = 'translateX(' + (-slideIndex * 100) + '%)';
+    $('.carousel').css('transform', transformValue);
+  
+    function showSlide(index) {
+      $('.carousel').css('transition', 'transform 0.5s ease-in-out');
+      var transformValue = 'translateX(' + (-index * 100) + '%)';
+      $('.carousel').css('transform', transformValue);
+      updatePaginator(index);
+    }
+  
+    function nextSlide() {
+      if (slideIndex >= totalSlides - 1) {
+        slideIndex = 0;
+        $('.carousel').css('transition', 'none');
+        $('.carousel').css('transform', 'translateX(0)');
+        setTimeout(function() {
+          slideIndex++;
+          showSlide(slideIndex);
+        }, 20); // Small delay to reset the transition
+      } else {
+        slideIndex++;
+        showSlide(slideIndex);
+      }
+    }
+  
+    function prevSlide() {
+      if (slideIndex <= 0) {
+        slideIndex = totalSlides - 1;
+        $('.carousel').css('transition', 'none');
+        var transformValue = 'translateX(' + (-slideIndex * 100) + '%)';
+        $('.carousel').css('transform', transformValue);
+        setTimeout(function() {
+          slideIndex--;
+          showSlide(slideIndex);
+        }, 20); // Small delay to reset the transition
+      } else {
+        slideIndex--;
+        showSlide(slideIndex);
+      }
+    }
+  
+    function updatePaginator(index) {
+      var realIndex = index - 1;
+      if (realIndex < 0) {
+        realIndex = totalSlides - 3;
+      } else if (realIndex >= totalSlides - 2) {
+        realIndex = 0;
+      }
+      $('.carousel-radio').prop('checked', false);
+      $('.carousel-radio').eq(realIndex).prop('checked', true);
+    }
+  
+    $('.next-slide').click(nextSlide);
+    $('.prev-slide').click(prevSlide);
+  
+    $('.carousel-radio').click(function() {
+      var selectedSlideIndex = $(this).data('slide-index');
+      slideIndex = selectedSlideIndex + 1;
+      showSlide(slideIndex);
+    });
+  
+    setInterval(nextSlide, 5000);
+  });
+  
+  
+</script>
