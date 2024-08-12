@@ -1,0 +1,135 @@
+<style>
+    .b1 {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffebf0; /* Light pink background */
+    }
+    h1 {
+        text-align: center;
+        color: #800080; /* Purple color for the main heading */
+    }
+    .faq-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    .faq-item {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .faq-question {
+        font-weight: bold;
+        padding: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s ease;
+        background-color: #ffc0cb; /* Light pink for questions */
+        color: #800080; /* Purple text color */
+    }
+    .faq-question:hover {
+        background-color: #ffb6c1; /* Slightly darker pink on hover */
+    }
+    .faq-question::after {
+        content: '+';
+        font-size: 20px;
+        transition: transform 0.3s ease;
+        color: #800080; /* Purple color for the plus icon */
+    }
+    .faq-question.active::after {
+        transform: rotate(45deg);
+    }
+    .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        background-color: #f0f0ff; /* Light purple background for answers */
+        color: #4b0082; /* Dark purple text color */
+    }
+    .faq-answer.active {
+        max-height: 1000px;
+        padding: 20px;
+    }
+</style>
+
+<div class ="b1">
+    <h1>Soft Toys Store FAQs</h1>
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">What types of soft toys do you offer?</div>
+            <div class="faq-answer">We offer a wide range of soft toys, including plush animals, character-themed toys, pillows, and cushions. Our collection is designed to be huggable, cute, and perfect for all ages.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Are your soft toys safe for children?</div>
+            <div class="faq-answer">Yes, all our soft toys are made from high-quality, non-toxic materials and meet international safety standards. They are safe for children of all ages, including infants.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Do you offer gift wrapping services?</div>
+            <div class="faq-answer">Yes, we provide gift wrapping services for an additional fee. You can select this option during checkout for online orders or request it in-store.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Can I personalize a soft toy?</div>
+            <div class="faq-answer">Currently, we do not offer personalization services. However, we are always looking to expand our offerings, so stay tuned for future updates!</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">What is your return policy?</div>
+            <div class="faq-answer">We accept returns within 30 days of purchase, provided the soft toy is in its original condition with tags attached. You can return items in-store or by mail, and we offer store credit, exchanges, or refunds depending on your preference.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Do you have a loyalty program?</div>
+            <div class="faq-answer">Yes, we offer a loyalty program where you earn points with every purchase. These points can be redeemed for discounts on future purchases, exclusive offers, and more.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">How do I care for my soft toys?</div>
+            <div class="faq-answer">To keep your soft toys in great condition, we recommend spot cleaning with a mild detergent and air drying. Avoid using bleach or harsh chemicals, and do not machine wash unless the care label specifically states it is safe to do so.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Do you offer international shipping?</div>
+            <div class="faq-answer">Yes, we ship to many countries worldwide. Shipping costs and delivery times vary based on your location. Please check our shipping policy for more details.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">What payment methods do you accept?</div>
+            <div class="faq-answer">We accept all major credit cards, debit cards, PayPal, and Apple Pay for online orders. In-store, we also accept cash and gift cards.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Can I track my order?</div>
+            <div class="faq-answer">Yes, once your order is shipped, you will receive a tracking number via email. Use this number on our website or the courier's website to monitor your package's progress.</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = document.querySelectorAll('.faq-question');
+            
+            questions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const isActive = question.classList.contains('active');
+                    
+                    // Close all other answers
+                    questions.forEach(q => {
+                        if (q !== question) {
+                            q.classList.remove('active');
+                            q.nextElementSibling.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle the clicked question
+                    question.classList.toggle('active');
+                    answer.classList.toggle('active');
+                    
+                    // Smooth scroll to the question if it's not already visible
+                    if (!isActive) {
+                        question.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            });
+        });
+    </script>
+</div>
