@@ -1,0 +1,121 @@
+<title>Brand Profile - Toy Store</title>
+<link rel="stylesheet" href="styles.css">
+<body>
+        <header class="header">
+            <h1>Welcome to {{ shop.name }}</h1>
+        </header>
+    
+        <section class="brand-intro">
+            <h2>About Us</h2>
+            <p>{{ shop.name }} is your go-to destination for high-quality, affordable toys and accessories. Our mission is to bring joy to children and adults alike with our wide range of products that combine fun, functionality, and style.</p>
+        </section>
+    
+        <section class="brand-mission">
+            <h2>Our Mission</h2>
+            <p>At {{ shop.name }}, we believe in creating products that inspire creativity and bring happiness to our customers. Our goal is to provide innovative and unique toys that meet the needs of modern consumers while maintaining the highest standards of quality.</p>
+        </section>
+    
+        <section class="product-categories">
+            <h2>Product Categories</h2>
+            <div class="categories">
+                <div class="category">
+                    <h3>Soft Toys</h3>
+                </div>
+                <div class="category">
+                    <h3>Stationery</h3>
+                </div>
+                <div class="category">
+                    <h3>Accessories</h3>
+                </div>
+                <!-- Add more categories as needed -->
+            </div>
+        </section>
+    
+        <section class="brand-gallery">
+            <h2>Gallery</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                </div>
+                <div class="gallery-item">
+                </div>
+                <div class="gallery-item">
+                </div>
+                
+            </div>
+        </section>
+    
+        <footer class="footer">
+            <p>© {{ "now" | date: "%Y" }} {{ shop.name }}. All rights reserved.</p>
+        </footer>
+    </body>
+    
+
+    <style>body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+    
+    .header {
+        background-color: #D19C97;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .brand-intro, .brand-mission, .product-categories, .brand-gallery {
+        margin: 2rem auto;
+        max-width: 1200px;
+        padding: 1rem;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+        color: #D19C97;
+        margin-bottom: 1rem;
+    }
+    
+    .product-categories .categories {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    
+    .category {
+        flex-basis: 30%;
+        text-align: center;
+        margin: 1rem 0;
+    }
+    
+    .category img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+    
+    .brand-gallery .gallery {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    
+    .gallery-item {
+        flex-basis: 30%;
+        margin: 1rem 0;
+    }
+    
+    .gallery-item img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+    
+    .footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+    </style>
